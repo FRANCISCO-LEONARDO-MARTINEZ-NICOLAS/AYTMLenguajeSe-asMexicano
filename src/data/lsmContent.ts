@@ -166,7 +166,7 @@ const ABECEDARIO_CORRECT_WORDS: Record<string, VisualWord> = {
   T: { emoji: '🐢', word: 'Tortuga' },
   U: { emoji: '🦄', word: 'Unicornio' },
   V: { emoji: '🐄', word: 'Vaca' },
-  W: { emoji: '🥃', word: 'Whisky' },
+  W: { emoji: '🛜', word: 'Wifi' },
   X: { emoji: '📻', word: 'Xilófono' },
   Y: { emoji: '🐴', word: 'Yegua' },
   Z: { emoji: '🦊', word: 'Zorro' },
