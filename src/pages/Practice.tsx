@@ -1,30 +1,49 @@
 import { useCallback, useMemo, useState } from 'react';
+import { ArrowLeft, PartyPopper, RefreshCw, Star } from 'lucide-react';
 import { VideoPlaceholder } from '../components/VideoPlaceholder';
-import { practiceQuestions } from '../data/lsmContent';
+import { practiceCategories, type PracticeCategory, type PracticeOption, type PracticeQuestion } from '../data/lsmContent';
 import { useFeedbackSound } from '../hooks/useFeedbackSound';
-import { PartyPopper, RefreshCw } from 'lucide-react';
 
-/**
- * Quiz visual: video de seña + opciones con emoji e imagen semántica.
- */
+function shuffleArray<T>(arr: T[]): T[] {
+  const copy = [...arr];
+  for (let i = copy.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [copy[i], copy[j]] = [copy[j], copy[i]];
+  }
+  return copy;
+}
+
+function OptionContent({ opt }: { opt: PracticeOption }) {
+  if (opt.stars !== undefined) {
+    if (opt.stars === 0) return <span className="text-2xl font-bold text-slate-400">0</span>;
+    return (
+      <div className="flex flex-wrap justify-center gap-0.5" aria-label={`${opt.stars} estrellas`}>
+        {Array.from({ length: opt.stars }).map((_, i) => (
+          <Star key={i} className="h-4 w-4 fill-amber-400 text-amber-400" aria-hidden />
+        ))}
+      </div>
+    );
+  }
+  return <span aria-hidden>{opt.emoji ?? '❓'}</span>;
+}
+
 export function Practice() {
   const { playCorrect, playWrong } = useFeedbackSound();
+  const [stage, setStage] = useState<'select' | 'quiz' | 'result'>('select');
+  const [selectedCategory, setSelectedCategory] = useState<PracticeCategory | null>(null);
+  const [shuffledQuestions, setShuffledQuestions] = useState<PracticeQuestion[]>([]);
   const [index, setIndex] = useState(0);
   const [score, setScore] = useState(0);
   const [feedback, setFeedback] = useState<'idle' | 'correct' | 'wrong'>('idle');
   const [answered, setAnswered] = useState(false);
   const [pickedId, setPickedId] = useState<string | null>(null);
 
-  const total = practiceQuestions.length;
-  const question = practiceQuestions[index];
+  const total = shuffledQuestions.length;
+  const question = shuffledQuestions[index];
 
   const shuffledOptions = useMemo(() => {
-    const opts = [...question.options];
-    for (let i = opts.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [opts[i], opts[j]] = [opts[j], opts[i]];
-    }
-    return opts;
+    if (!question) return [];
+    return shuffleArray(question.options);
   }, [question]);
 
   const handlePick = useCallback(
@@ -44,35 +63,110 @@ export function Practice() {
     [answered, playCorrect, playWrong]
   );
 
-  const next = () => {
-    setFeedback('idle');
-    setAnswered(false);
-    setPickedId(null);
-    setIndex((i) => (i + 1) % total);
-  };
-
-  const resetAll = () => {
+  const startCategory = (cat: PracticeCategory) => {
+    setSelectedCategory(cat);
+    setShuffledQuestions(shuffleArray(cat.questions));
     setIndex(0);
     setScore(0);
     setFeedback('idle');
     setAnswered(false);
     setPickedId(null);
+    setStage('quiz');
   };
+
+  const next = () => {
+    setFeedback('idle');
+    setAnswered(false);
+    setPickedId(null);
+    if (index + 1 >= total) {
+      setStage('result');
+    } else {
+      setIndex((i) => i + 1);
+    }
+  };
+
+  if (stage === 'select') {
+    return (
+      <div className="space-y-6">
+        <header className="rounded-3xl border-4 border-white bg-lime-100 p-6 text-center shadow-md">
+          <h1 className="font-display text-3xl font-extrabold text-emerald-900 md:text-4xl">Practicar</h1>
+          <p className="mt-2 text-lg text-emerald-900/90">Elige una categoría para comenzar</p>
+        </header>
+        <section className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {practiceCategories.map((cat) => (
+            <button
+              key={cat.id}
+              type="button"
+              onClick={() => startCategory(cat)}
+              className="rounded-3xl border-4 border-white bg-white/95 p-6 text-center shadow-md transition hover:-translate-y-1 hover:shadow-xl"
+            >
+              <p className="text-4xl" aria-hidden>{cat.emoji}</p>
+              <p className="mt-2 font-display text-lg font-extrabold text-indigo-900">{cat.title}</p>
+              <p className="text-sm text-slate-500">{cat.description}</p>
+              <p className="mt-2 text-xs font-bold text-emerald-700">{cat.questions.length} preguntas</p>
+            </button>
+          ))}
+        </section>
+      </div>
+    );
+  }
+
+  if (stage === 'result') {
+    const pct = total ? Math.round((score / total) * 100) : 0;
+    return (
+      <div className="space-y-6">
+        <header className="rounded-3xl border-4 border-white bg-lime-100 p-6 text-center shadow-md">
+          <h1 className="font-display text-3xl font-extrabold text-emerald-900 md:text-4xl">Resultado final</h1>
+          <p className="mt-1 text-emerald-700">{selectedCategory?.title}</p>
+        </header>
+        <section className="rounded-3xl border-4 border-white bg-white/95 p-8 text-center shadow-xl">
+          <p className="text-5xl">{pct >= 80 ? '🏆' : pct >= 50 ? '🌟' : '💪'}</p>
+          <p className="mt-2 text-lg font-bold text-slate-700">
+            Aciertos: {score} de {total} ({pct}%)
+          </p>
+          <div className="mt-5 flex justify-center gap-3">
+            <button
+              type="button"
+              onClick={() => (selectedCategory ? startCategory(selectedCategory) : setStage('select'))}
+              className="rounded-2xl border-4 border-indigo-200 bg-indigo-600 px-6 py-3 font-bold text-white"
+            >
+              Repetir categoría
+            </button>
+            <button
+              type="button"
+              onClick={() => setStage('select')}
+              className="rounded-2xl border-4 border-slate-200 bg-white px-6 py-3 font-bold text-slate-700"
+            >
+              Elegir otra
+            </button>
+          </div>
+        </section>
+      </div>
+    );
+  }
+
+  if (!question) return null;
 
   return (
     <div className="space-y-8">
       <header className="rounded-3xl border-4 border-white bg-lime-100 p-6 text-center shadow-md">
-        <h1 className="font-display text-3xl font-extrabold text-emerald-900 md:text-4xl">Practicar</h1>
-        <p className="mt-2 text-lg text-emerald-900/90">
-          Mira la seña y elige la imagen correcta. ¡Tú puedes!
-        </p>
+        <div className="mb-3 flex justify-start">
+          <button
+            type="button"
+            onClick={() => setStage('select')}
+            className="inline-flex items-center gap-1 rounded-xl border-2 border-emerald-300 bg-white px-3 py-2 text-sm font-bold text-emerald-800 hover:bg-emerald-50"
+          >
+            <ArrowLeft className="h-4 w-4" aria-hidden />
+            Volver
+          </button>
+        </div>
+        <h1 className="font-display text-3xl font-extrabold text-emerald-900 md:text-4xl">
+          {selectedCategory?.emoji} {selectedCategory?.title}
+        </h1>
+        <p className="mt-2 text-lg text-emerald-900/90">Mira la seña y elige la opción correcta</p>
         <div className="mt-4 inline-flex flex-wrap items-center justify-center gap-3">
-          <span className="rounded-full bg-white px-4 py-2 font-bold text-emerald-800 shadow">
-            Puntos: {score} / {total}
-          </span>
-          <span className="rounded-full bg-emerald-600 px-4 py-2 font-bold text-white shadow">
-            Pregunta {index + 1} de {total}
-          </span>
+          <span className="rounded-full bg-white px-4 py-2 font-bold text-emerald-800 shadow">Puntos: {score} / {total}</span>
+          <span className="rounded-full bg-emerald-600 px-4 py-2 font-bold text-white shadow">Pregunta {index + 1} de {total}</span>
         </div>
       </header>
 
@@ -110,7 +204,8 @@ export function Practice() {
                   aria-label={opt.alt}
                   title={opt.alt}
                 >
-                  <span aria-hidden>{opt.emoji}</span>
+                  <OptionContent opt={opt} />
+                  <span className="text-center text-xs font-bold text-slate-600">{opt.label ?? opt.alt}</span>
                   <span className="sr-only">{opt.alt}</span>
                 </button>
               );
@@ -137,14 +232,14 @@ export function Practice() {
               className="inline-flex flex-1 items-center justify-center gap-2 rounded-2xl border-4 border-indigo-200 bg-indigo-600 px-6 py-4 font-bold text-white shadow-[0_6px_0_#3730a3] transition hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-50 active:translate-y-1 active:shadow-none"
             >
               <RefreshCw className="h-5 w-5" aria-hidden />
-              Siguiente pregunta
+              {index + 1 < total ? 'Siguiente pregunta' : 'Ver resultado'}
             </button>
             <button
               type="button"
-              onClick={resetAll}
+              onClick={() => setStage('select')}
               className="rounded-2xl border-4 border-slate-200 bg-white px-5 py-4 font-bold text-slate-700 shadow-sm hover:bg-slate-50"
             >
-              Reiniciar todo
+              Cambiar categoría
             </button>
           </div>
         </div>
