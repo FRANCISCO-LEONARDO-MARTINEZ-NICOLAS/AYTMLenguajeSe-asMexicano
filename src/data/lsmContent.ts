@@ -20,12 +20,17 @@ export type DictionaryCategory = {
   items: DictionaryItem[];
 };
 
-/** Alfabeto escolar mexicano incluye Ñ */
-const ALFABETO =
-  'ABCDEFGHIJKLMNÑOPQRSTUVWXYZ'.split('');
+/** Diccionario escolar incluye Ñ, LL y RR */
+const DICTIONARY_ALFABETO = [
+  'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'LL', 'M', 'N', 'Ñ',
+  'O', 'P', 'Q', 'R', 'RR', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
+];
+
+/** Práctica de letras: A-Z y Ñ */
+const PRACTICE_ALFABETO = 'ABCDEFGHIJKLMNÑOPQRSTUVWXYZ'.split('');
 
 function makeLetterItems(): DictionaryItem[] {
-  return ALFABETO.map((letra) => ({
+  return DICTIONARY_ALFABETO.map((letra) => ({
     id: `letra-${letra}`,
     label: letra,
     videoSrc: `/videos/lsm/Letras/${letra}.mp4`,
@@ -173,7 +178,7 @@ const ABECEDARIO_CORRECT_WORDS: Record<string, VisualWord> = {
 };
 
 function makeAbecedarioPracticeQuestions(): PracticeQuestion[] {
-  return ALFABETO.map((letter) => {
+  return PRACTICE_ALFABETO.map((letter) => {
     const correct = ABECEDARIO_CORRECT_WORDS[letter];
     const distractors = DISTRACTOR_BANK.filter(
       (item) => item.word[0].toUpperCase() !== letter && item.word !== correct.word
@@ -206,60 +211,122 @@ function shuffleArray<T>(arr: T[]): T[] {
   return copy;
 }
 
-const extraPracticeQuestions: PracticeQuestion[] = [
-  {
-    id: 'pq-3',
-    topic: 'Número 3',
-    signVideoSrc: '/videos/lsm/Numeros/3.mp4',
-    prompt: '¿Cuántos objetos ves?',
-    options: [
-      { id: 'o1', emoji: '🍎', alt: 'Una manzana', correct: false },
-      { id: 'o2', emoji: '🍎🍎🍎', alt: 'Tres manzanas', correct: true },
-      { id: 'o3', emoji: '🍎🍎', alt: 'Dos manzanas', correct: false },
-      { id: 'o4', emoji: '🍎🍎🍎🍎', alt: 'Cuatro manzanas', correct: false },
-    ],
-  },
-  {
-    id: 'pq-rojo',
-    topic: 'Color rojo',
-    signVideoSrc: '/videos/lsm/Colores/Rojo.mp4',
-    prompt: '¿Qué color es la fresa?',
-    options: [
-      { id: 'o1', emoji: '🍓', alt: 'Fresa (rojo)', correct: true },
-      { id: 'o2', emoji: '🫐', alt: 'Arándano', correct: false },
-      { id: 'o3', emoji: '🍋', alt: 'Limón', correct: false },
-      { id: 'o4', emoji: '🍇', alt: 'Uvas', correct: false },
-    ],
-  },
-  {
-    id: 'pq-mano',
-    topic: 'Mano',
-    signVideoSrc: '/videos/lsm/Cuerpo/Mano.mp4',
-    prompt: '¿Con qué saludamos con la mano?',
-    options: [
-      { id: 'o1', emoji: '👋', alt: 'Mano saludando', correct: true },
-      { id: 'o2', emoji: '🦶', alt: 'Pie', correct: false },
-      { id: 'o3', emoji: '👂', alt: 'Oreja', correct: false },
-      { id: 'o4', emoji: '👃', alt: 'Nariz', correct: false },
-    ],
-  },
-  {
-    id: 'pq-10',
-    topic: 'Número 10',
-    signVideoSrc: '/videos/lsm/Numeros/10.mp4',
-    prompt: '¿Qué grupo muestra diez?',
-    options: [
-      { id: 'o1', emoji: '⭐'.repeat(8), alt: 'Ocho estrellas', correct: false },
-      { id: 'o2', emoji: '⭐'.repeat(10), alt: 'Diez estrellas', correct: true },
-      { id: 'o3', emoji: '⭐'.repeat(6), alt: 'Seis estrellas', correct: false },
-      { id: 'o4', emoji: '⭐'.repeat(12), alt: 'Doce estrellas', correct: false },
-    ],
-  },
-];
+function makeNumbersPracticeQuestions(): PracticeQuestion[] {
+  return Array.from({ length: 21 }, (_, n) => {
+    const pool = [n - 2, n - 1, n + 1, n + 2, n + 3].filter((x) => x >= 0 && x <= 20 && x !== n);
+    const distractors = pool.slice(0, 3);
+    const options = shuffleArray([
+      { id: 'o1', stars: n, label: String(n), alt: `${n} estrellas`, correct: true },
+      ...distractors.map((value, i) => ({
+        id: `o${i + 2}`,
+        stars: value,
+        label: String(value),
+        alt: `${value} estrellas`,
+        correct: false,
+      })),
+    ]);
+
+    return {
+      id: `pq-num-${n}`,
+      topic: `Número ${n}`,
+      signVideoSrc: `/videos/lsm/Numeros/${n}.mp4`,
+      prompt: `¿Cuál opción muestra ${n} ${n === 1 ? 'estrella' : 'estrellas'}?`,
+      options,
+    };
+  });
+}
+
+const COLOR_PRACTICE = [
+  { key: 'Rojo', emoji: '🍓', prompt: '¿Qué objeto es de color rojo?' },
+  { key: 'Azul', emoji: '🫐', prompt: '¿Qué objeto es de color azul?' },
+  { key: 'Verde', emoji: '🐸', prompt: '¿Qué objeto es de color verde?' },
+  { key: 'Amarillo', emoji: '🍌', prompt: '¿Qué objeto es de color amarillo?' },
+  { key: 'Naranja', emoji: '🎃', prompt: '¿Qué objeto es de color naranja?' },
+  { key: 'Morado', emoji: '🍇', prompt: '¿Qué objeto es de color morado?' },
+  { key: 'Rosa', emoji: '🌸', prompt: '¿Qué objeto es de color rosa?' },
+  { key: 'Negro', emoji: '🕷️', prompt: '¿Qué objeto es de color negro?' },
+  { key: 'Blanco', emoji: '☁️', prompt: '¿Qué objeto es de color blanco?' },
+  { key: 'Cafe', emoji: '🍫', prompt: '¿Qué objeto es de color café?' },
+  { key: 'Gris', emoji: '🐘', prompt: '¿Qué objeto es de color gris?' },
+] as const;
+
+function makeColorPracticeQuestions(): PracticeQuestion[] {
+  const distractors: VisualWord[] = [
+    { emoji: '🍉', word: 'Sandía' },
+    { emoji: '🍋', word: 'Limón' },
+    { emoji: '🌊', word: 'Mar' },
+    { emoji: '🌿', word: 'Hoja' },
+    { emoji: '🦄', word: 'Unicornio' },
+  ];
+
+  return COLOR_PRACTICE.map((color, idx) => ({
+    id: `pq-color-${color.key.toLowerCase()}`,
+    topic: `Color ${color.key}`,
+    signVideoSrc: `/videos/lsm/Colores/${color.key}.mp4`,
+    prompt: color.prompt,
+    options: shuffleArray([
+      { id: 'o1', emoji: color.emoji, alt: color.key, correct: true },
+      ...distractors.slice(idx % 2, (idx % 2) + 3).map((item, i) => ({
+        id: `o${i + 2}`,
+        emoji: item.emoji,
+        alt: item.word,
+        correct: false,
+      })),
+    ]),
+  }));
+}
+
+const CUERPO_PRACTICE = [
+  { key: 'Cabeza', emoji: '🧠', prompt: '¿Qué parte del cuerpo pensamos?' },
+  { key: 'Ojos', emoji: '👀', prompt: '¿Con qué parte del cuerpo vemos?' },
+  { key: 'Nariz', emoji: '👃', prompt: '¿Con qué parte del cuerpo olemos?' },
+  { key: 'Cara', emoji: '😊', prompt: '¿Qué parte del cuerpo sonríe?' },
+  { key: 'Oreja', emoji: '👂', prompt: '¿Con qué parte del cuerpo escuchamos?' },
+  { key: 'Mano', emoji: '👋', prompt: '¿Con qué parte del cuerpo saludamos?' },
+  { key: 'Brazo', emoji: '💪', prompt: '¿Qué parte usamos para cargar cosas?' },
+  { key: 'Pierna', emoji: '🦵', prompt: '¿Qué parte usamos para correr?' },
+  { key: 'Pie', emoji: '🦶', prompt: '¿Con qué parte caminamos?' },
+  { key: 'Dedo', emoji: '☝️', prompt: '¿Qué parte usamos para señalar?' },
+  { key: 'Cuello', emoji: '🧣', prompt: '¿Qué parte une cabeza y cuerpo?' },
+  { key: 'Hombro', emoji: '🙆', prompt: '¿Dónde se conecta el brazo?' },
+] as const;
+
+function makeBodyPracticeQuestions(): PracticeQuestion[] {
+  const distractors: VisualWord[] = [
+    { emoji: '👂', word: 'Oreja' },
+    { emoji: '👃', word: 'Nariz' },
+    { emoji: '🦶', word: 'Pie' },
+    { emoji: '👋', word: 'Mano' },
+    { emoji: '🦵', word: 'Pierna' },
+  ];
+
+  return CUERPO_PRACTICE.map((item, idx) => ({
+    id: `pq-cuerpo-${item.key.toLowerCase()}`,
+    topic: item.key,
+    signVideoSrc: `/videos/lsm/Cuerpo/${item.key}.mp4`,
+    prompt: item.prompt,
+    options: shuffleArray([
+      { id: 'o1', emoji: item.emoji, alt: item.key, correct: true },
+      ...distractors.filter((d) => d.word !== item.key).slice(idx % 2, (idx % 2) + 3).map((d, i) => ({
+        id: `o${i + 2}`,
+        emoji: d.emoji,
+        alt: d.word,
+        correct: false,
+      })),
+    ]),
+  }));
+}
+
+const abecedarioPracticeQuestions = makeAbecedarioPracticeQuestions();
+const numerosPracticeQuestions = makeNumbersPracticeQuestions();
+const coloresPracticeQuestions = makeColorPracticeQuestions();
+const cuerpoPracticeQuestions = makeBodyPracticeQuestions();
 
 export const practiceQuestions: PracticeQuestion[] = [
-  ...makeAbecedarioPracticeQuestions(),
-  ...extraPracticeQuestions,
+  ...abecedarioPracticeQuestions,
+  ...numerosPracticeQuestions,
+  ...coloresPracticeQuestions,
+  ...cuerpoPracticeQuestions,
 ];
 
 export const practiceCategories: PracticeCategory[] = [
@@ -267,29 +334,29 @@ export const practiceCategories: PracticeCategory[] = [
     id: 'abecedario',
     title: 'Abecedario',
     emoji: '🔤',
-    description: 'Letras básicas para iniciar',
-    questions: practiceQuestions.filter((q) => q.topic.toLowerCase().includes('letra')),
+    description: 'Letras de la A a la Z y la Ñ',
+    questions: abecedarioPracticeQuestions,
   },
   {
     id: 'numeros',
     title: 'Números',
     emoji: '🔢',
-    description: 'Conteo y cantidades',
-    questions: practiceQuestions.filter((q) => q.topic.toLowerCase().includes('número')),
+    description: 'Práctica del 0 al 20',
+    questions: numerosPracticeQuestions,
   },
   {
     id: 'colores',
     title: 'Colores',
     emoji: '🎨',
-    description: 'Identifica colores',
-    questions: practiceQuestions.filter((q) => q.topic.toLowerCase().includes('color')),
+    description: 'Identifica colores básicos',
+    questions: coloresPracticeQuestions,
   },
   {
     id: 'cuerpo',
     title: 'Partes del cuerpo',
     emoji: '🧒',
     description: 'Señas del cuerpo humano',
-    questions: practiceQuestions.filter((q) => q.topic.toLowerCase().includes('mano')),
+    questions: cuerpoPracticeQuestions,
   },
   {
     id: 'todo',
