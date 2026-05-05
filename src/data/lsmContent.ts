@@ -28,7 +28,7 @@ function makeLetterItems(): DictionaryItem[] {
   return ALFABETO.map((letra) => ({
     id: `letra-${letra}`,
     label: letra,
-    videoSrc: `/videos/lsm/letra-${letra.toLowerCase()}.mp4`,
+    videoSrc: `/videos/lsm/Letras/${letra}.mp4`,
   }));
 }
 
@@ -36,7 +36,7 @@ function makeNumbers(): DictionaryItem[] {
   return Array.from({ length: 21 }, (_, n) => ({
     id: `num-${n}`,
     label: String(n),
-    videoSrc: `/videos/lsm/numero-${n}.mp4`,
+    videoSrc: `/videos/lsm/Numeros/${n}.mp4`,
   }));
 }
 
@@ -61,17 +61,17 @@ export const dictionaryCategories: DictionaryCategory[] = [
     emoji: '🎨',
     description: 'Colores básicos',
     items: [
-      { id: 'c-rojo', label: 'Rojo', videoSrc: '/videos/lsm/color-rojo.mp4' },
-      { id: 'c-azul', label: 'Azul', videoSrc: '/videos/lsm/color-azul.mp4' },
-      { id: 'c-verde', label: 'Verde', videoSrc: '/videos/lsm/color-verde.mp4' },
-      { id: 'c-amarillo', label: 'Amarillo', videoSrc: '/videos/lsm/color-amarillo.mp4' },
-      { id: 'c-naranja', label: 'Naranja', videoSrc: '/videos/lsm/color-naranja.mp4' },
-      { id: 'c-morado', label: 'Morado', videoSrc: '/videos/lsm/color-morado.mp4' },
-      { id: 'c-rosa', label: 'Rosa', videoSrc: '/videos/lsm/color-rosa.mp4' },
-      { id: 'c-negro', label: 'Negro', videoSrc: '/videos/lsm/color-negro.mp4' },
-      { id: 'c-blanco', label: 'Blanco', videoSrc: '/videos/lsm/color-blanco.mp4' },
-      { id: 'c-cafe', label: 'Café', videoSrc: '/videos/lsm/color-cafe.mp4' },
-      { id: 'c-gris', label: 'Gris', videoSrc: '/videos/lsm/color-gris.mp4' },
+      { id: 'c-rojo', label: 'Rojo', videoSrc: '/videos/lsm/Colores/Rojo.mp4' },
+      { id: 'c-azul', label: 'Azul', videoSrc: '/videos/lsm/Colores/Azul.mp4' },
+      { id: 'c-verde', label: 'Verde', videoSrc: '/videos/lsm/Colores/Verde.mp4' },
+      { id: 'c-amarillo', label: 'Amarillo', videoSrc: '/videos/lsm/Colores/Amarillo.mp4' },
+      { id: 'c-naranja', label: 'Naranja', videoSrc: '/videos/lsm/Colores/Naranja.mp4' },
+      { id: 'c-morado', label: 'Morado', videoSrc: '/videos/lsm/Colores/Morado.mp4' },
+      { id: 'c-rosa', label: 'Rosa', videoSrc: '/videos/lsm/Colores/Rosa.mp4' },
+      { id: 'c-negro', label: 'Negro', videoSrc: '/videos/lsm/Colores/Negro.mp4' },
+      { id: 'c-blanco', label: 'Blanco', videoSrc: '/videos/lsm/Colores/Blanco.mp4' },
+      { id: 'c-cafe', label: 'Café', videoSrc: '/videos/lsm/Colores/Cafe.mp4' },
+      { id: 'c-gris', label: 'Gris', videoSrc: '/videos/lsm/Colores/Gris.mp4' },
     ],
   },
   {
@@ -80,17 +80,18 @@ export const dictionaryCategories: DictionaryCategory[] = [
     emoji: '🧒',
     description: 'Cabeza, manos y más',
     items: [
-      { id: 'p-cabeza', label: 'Cabeza', videoSrc: '/videos/lsm/cabeza.mp4' },
-      { id: 'p-ojos', label: 'Ojos', videoSrc: '/videos/lsm/ojos.mp4' },
-      { id: 'p-nariz', label: 'Nariz', videoSrc: '/videos/lsm/nariz.mp4' },
-      { id: 'p-boca', label: 'Boca', videoSrc: '/videos/lsm/boca.mp4' },
-      { id: 'p-orejas', label: 'Orejas', videoSrc: '/videos/lsm/orejas.mp4' },
-      { id: 'p-manos', label: 'Manos', videoSrc: '/videos/lsm/manos.mp4' },
-      { id: 'p-brazos', label: 'Brazos', videoSrc: '/videos/lsm/brazos.mp4' },
-      { id: 'p-piernas', label: 'Piernas', videoSrc: '/videos/lsm/piernas.mp4' },
-      { id: 'p-pies', label: 'Pies', videoSrc: '/videos/lsm/pies.mp4' },
-      { id: 'p-dedos', label: 'Dedos', videoSrc: '/videos/lsm/dedos.mp4' },
-      { id: 'p-cuello', label: 'Cuello', videoSrc: '/videos/lsm/cuello.mp4' },
+      { id: 'p-cabeza', label: 'Cabeza', videoSrc: '/videos/lsm/Cuerpo/Cabeza.mp4' },
+      { id: 'p-ojos', label: 'Ojos', videoSrc: '/videos/lsm/Cuerpo/Ojos.mp4' },
+      { id: 'p-nariz', label: 'Nariz', videoSrc: '/videos/lsm/Cuerpo/Nariz.mp4' },
+      { id: 'p-cara', label: 'Cara', videoSrc: '/videos/lsm/Cuerpo/Cara.mp4' },
+      { id: 'p-oreja', label: 'Oreja', videoSrc: '/videos/lsm/Cuerpo/Oreja.mp4' },
+      { id: 'p-mano', label: 'Mano', videoSrc: '/videos/lsm/Cuerpo/Mano.mp4' },
+      { id: 'p-brazo', label: 'Brazo', videoSrc: '/videos/lsm/Cuerpo/Brazo.mp4' },
+      { id: 'p-pierna', label: 'Pierna', videoSrc: '/videos/lsm/Cuerpo/Pierna.mp4' },
+      { id: 'p-pie', label: 'Pie', videoSrc: '/videos/lsm/Cuerpo/Pie.mp4' },
+      { id: 'p-dedo', label: 'Dedo', videoSrc: '/videos/lsm/Cuerpo/Dedo.mp4' },
+      { id: 'p-cuello', label: 'Cuello', videoSrc: '/videos/lsm/Cuerpo/Cuello.mp4' },
+      { id: 'p-hombro', label: 'Hombro', videoSrc: '/videos/lsm/Cuerpo/Hombro.mp4' },
     ],
   },
 ];
@@ -200,12 +201,12 @@ export type MemoryPair = {
 };
 
 export const memoryPairs: MemoryPair[] = [
-  { id: 'm1', label: 'A', pairEmoji: '🅰️', signVideoSrc: '/videos/lsm/letra-a.mp4' },
-  { id: 'm2', label: 'L', pairEmoji: '🔤', signVideoSrc: '/videos/lsm/letra-l.mp4' },
-  { id: 'm3', label: 'S', pairEmoji: '✨', signVideoSrc: '/videos/lsm/letra-s.mp4' },
-  { id: 'm4', label: '5', pairEmoji: '5️⃣', signVideoSrc: '/videos/lsm/numero-5.mp4' },
-  { id: 'm5', label: 'Rojo', pairEmoji: '❤️', signVideoSrc: '/videos/lsm/color-rojo.mp4' },
-  { id: 'm6', label: 'Mano', pairEmoji: '✋', signVideoSrc: '/videos/lsm/manos.mp4' },
+  { id: 'm1', label: 'A', pairEmoji: '🅰️', signVideoSrc: '/videos/lsm/Letras/A.mp4' },
+  { id: 'm2', label: 'L', pairEmoji: '🔤', signVideoSrc: '/videos/lsm/Letras/L.mp4' },
+  { id: 'm3', label: 'S', pairEmoji: '✨', signVideoSrc: '/videos/lsm/Letras/S.mp4' },
+  { id: 'm4', label: '5', pairEmoji: '5️⃣', signVideoSrc: '/videos/lsm/Numeros/5.mp4' },
+  { id: 'm5', label: 'Rojo', pairEmoji: '❤️', signVideoSrc: '/videos/lsm/Colores/Rojo.mp4' },
+  { id: 'm6', label: 'Mano', pairEmoji: '✋', signVideoSrc: '/videos/lsm/Cuerpo/Mano.mp4' },
 ];
 
 /** Palabras cortas para ahorcado infantil (mayúsculas para botones) */
