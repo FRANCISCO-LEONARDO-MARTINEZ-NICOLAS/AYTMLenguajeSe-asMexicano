@@ -388,7 +388,7 @@ export const memoryPairs: MemoryPair[] = [
   { id: 'm6', label: 'Mano', pairEmoji: '✋', signVideoSrc: '/videos/lsm/Cuerpo/Mano.mp4' },
 ];
 
-/** Palabras cortas para ahorcado infantil (mayúsculas para botones) */
+/** Palabras cortas para juego de palabras infantil (mayúsculas para botones) */
 export type HangmanWord = {
   word: string;
   hintEmoji: string;

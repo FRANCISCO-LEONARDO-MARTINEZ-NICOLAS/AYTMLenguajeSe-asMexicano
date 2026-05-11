@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 import { Grid3x3, Smile } from 'lucide-react';
 
 /**
- * Centro de juegos: enlaces a memorama y ahorcado infantil.
+ * Centro de juegos: enlaces a memorama y rompecabezas infantil.
  */
 export function Games() {
   return (
@@ -27,11 +27,11 @@ export function Games() {
         </Link>
 
         <Link
-          to="/juegos/ahorcado"
+          to="/juegos/rompecabezas"
           className="flex flex-col items-center gap-4 rounded-3xl border-4 border-white bg-gradient-to-br from-orange-400 to-rose-600 p-10 text-white shadow-[0_10px_0_#be123c] transition hover:-translate-y-1 hover:brightness-110 active:translate-y-1 active:shadow-none"
         >
           <Smile className="h-16 w-16" strokeWidth={2.5} aria-hidden />
-          <span className="font-display text-3xl font-bold">Ahorcado amigo</span>
+          <span className="font-display text-3xl font-bold">Rompecabezas de asociación</span>
           <span className="text-center text-white/95">
             Adivina la palabra con pistas e imagen. Sin dibujos feos, súper amable.
           </span>

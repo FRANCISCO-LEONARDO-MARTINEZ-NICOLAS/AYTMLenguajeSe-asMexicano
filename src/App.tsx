@@ -3,7 +3,7 @@ import { Layout } from './components/Layout';
 import { Dictionary } from './pages/Dictionary';
 import { DictionaryCategory } from './pages/DictionaryCategory';
 import { Games } from './pages/Games';
-import { AssociationPuzzleGame } from './pages/AssociationPuzzleGame';
+import { AssociationPuzzleGame } from './pages/AssociationPuzzleGame.tsx';
 import { Home } from './pages/Home';
 import { MemoryGame } from './pages/MemoryGame';
 import { Practice } from './pages/Practice';

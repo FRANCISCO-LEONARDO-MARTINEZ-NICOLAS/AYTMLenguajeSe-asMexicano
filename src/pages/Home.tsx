@@ -16,7 +16,7 @@ export function Home() {
           Aprende Lengua de Señas Mexicana
         </h1>
         <p className="mt-4 text-lg text-slate-600 md:text-xl">
-          Explora el diccionario, practica con retos visuales y juega al memorama o al ahorcado
+          Explora el diccionario, practica con retos visuales y juega al memorama o al rompecabezas
           amigable. ¡Todo desde tu navegador!
         </p>
       </div>
@@ -46,7 +46,7 @@ export function Home() {
         >
           <Gamepad2 className="h-14 w-14 transition group-hover:rotate-12" strokeWidth={2.5} aria-hidden />
           <span className="font-display text-2xl font-bold">Juegos</span>
-          <span className="text-sm font-medium text-white/90">Memorama y ahorcado para niños</span>
+          <span className="text-sm font-medium text-white/90">Memorama y rompecabezas para niños</span>
         </Link>
       </div>
     </div>
