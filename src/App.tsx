@@ -3,7 +3,7 @@ import { Layout } from './components/Layout';
 import { Dictionary } from './pages/Dictionary';
 import { DictionaryCategory } from './pages/DictionaryCategory';
 import { Games } from './pages/Games';
-import { HangmanGame } from './pages/HangmanGame';
+import { AssociationPuzzleGame } from './pages/AssociationPuzzleGame';
 import { Home } from './pages/Home';
 import { MemoryGame } from './pages/MemoryGame';
 import { Practice } from './pages/Practice';
@@ -21,7 +21,7 @@ function App() {
         <Route path="/practicar" element={<Practice />} />
         <Route path="/juegos" element={<Games />} />
         <Route path="/juegos/memorama" element={<MemoryGame />} />
-        <Route path="/juegos/ahorcado" element={<HangmanGame />} />
+        <Route path="/juegos/rompecabezas" element={<AssociationPuzzleGame />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Route>
     </Routes>
